@@ -75,6 +75,7 @@ class DrushTask extends Task {
   private $return_property = NULL;
   private $verbose = FALSE;
   private $haltonerror = TRUE;
+  private $alias = NULL;
 
   /**
    * The Drush command to run.
@@ -195,6 +196,17 @@ class DrushTask extends Task {
   }
 
   /**
+   * Site alias.
+   */
+  public function setAlias($var) {
+    if (is_string($var)) {
+      $this->alias = $var;
+    } else {
+      $this->alias = NULL;
+    }
+  }
+
+  /**
    * Initialize the task.
    */
   public function init() {
@@ -211,6 +223,10 @@ class DrushTask extends Task {
     $command = array();
 
     $command[] = !empty($this->bin) ? $this->bin : 'drush';
+
+    if (!empty($this->alias)) {
+      $command[] = $this->alias;
+    }
 
     $option = new DrushOption();
     $option->setName('nocolor');
