@@ -33,6 +33,10 @@ class DrushOption {
     return $this->name;
   }
 
+  public function setValue($str) {
+    $this->value = $str;
+  }
+
   public function addText($str) {
     $this->value = $str;
   }
