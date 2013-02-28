@@ -33,6 +33,10 @@ class DrushOption {
     return $this->name;
   }
 
+  public function setValue($str) {
+    $this->value = $str;
+  }
+
   public function addText($str) {
     $this->value = $str;
   }
@@ -150,7 +154,7 @@ class DrushTask extends Task {
   }
 
   /**
-   * Shoukld the task fail on Drush error (non zero exit code)
+   * Should the task fail on Drush error (non zero exit code)
    */
   public function setHaltonerror($var) {
     if (is_string($var)) {
@@ -161,7 +165,7 @@ class DrushTask extends Task {
     }
   }
 
-  /**
+  /**  
    * Parameters for the Drush command.
    */
   public function createParam() {
