@@ -6,76 +6,212 @@
  */
 require_once "phing/Task.php";
 
+/**
+ * A Drush CLI parameter.
+ */
 class DrushParam {
 
-  private $value;
+  /**
+   * @var string The parameter's value.
+   */
+  protected $value;
 
+  /**
+   * Set the parameter value from a text element.
+   *
+   * @param mixed $str
+   *   The value of the text element.
+   */
   public function addText($str) {
-    $this->value = $str;
+    $this->value = (string) $str;
   }
 
+  /**
+   * Get the parameter's value.
+   *
+   * return string
+   *   The parameter value.
+   */
   public function getValue() {
     return $this->value;
   }
 
 }
 
+/**
+ * A Drush CLI option.
+ */
 class DrushOption {
 
-  private $name;
-  private $value;
+  /**
+   * @var string The option's name.
+   */
+  protected $name;
 
+  /**
+   * @var string The option's value.
+   */
+  protected $value;
+
+  /**
+   * Set the option's name.
+   *
+   * @param string $str
+   *   The option's name.
+   */
   public function setName($str) {
-    $this->name = $str;
+    $this->name = (string) $str;
   }
 
+  /**
+   * Get the option's name.
+   *
+   * @return string
+   *   The option's name.
+   */
   public function getName() {
     return $this->name;
   }
 
+  /**
+   * Set the option's value.
+   *
+   * @param string $str
+   *   The option's value.
+   */
   public function setValue($str) {
     $this->value = $str;
   }
 
+  /**
+   * Set the option's value from a text element.
+   *
+   * @param string $str
+   *   The value of the text element.
+   */
   public function addText($str) {
-    $this->value = $str;
+    $this->value = (string) $str;
   }
 
+  /**
+   * Get the option's value.
+   *
+   * @return string
+   *   The option's value.
+   */
   public function getValue() {
     return $this->value;
   }
 
+  /**
+   * @{inheritdoc}
+   */
   public function toString() {
     $name  = $this->getName();
     $value = $this->getValue();
-    $str = '--'.$name;
+    $str = '--' . $name;
     if (!empty($value)) {
-      $str .= '='.$value;
+      $str .= '=' . $value;
     }
     return $str;
   }
 
 }
 
+/**
+ * DrushTask
+ *
+ * Runs the Drush commad line tool.
+ * See https://github.com/drush-ops/drush
+ */
 class DrushTask extends Task {
 
   /**
-   * The message passed in the buildfile.
+   * @var string The executed Drush command.
    */
-  private $command = array();
-  private $bin = NULL;
-  private $uri = NULL;
-  private $root = NULL;
-  private $assume = NULL;
-  private $simulate = FALSE;
-  private $pipe = FALSE;
-  private $options = array();
-  private $params = array();
-  private $return_glue = "\n";
-  private $return_property = NULL;
-  private $verbose = FALSE;
-  private $haltonerror = TRUE;
-  private $alias = NULL;
+  protected $command = NULL;
+
+  /**
+   * @var string Path the the Drush binary.
+   */
+  protected $bin = NULL;
+
+  /**
+   * @var string URI of the Drupal site to use.
+   */
+  protected $uri = NULL;
+
+  /**
+   * @var string Drupal root directory to use.
+   */
+  protected $root = NULL;
+
+  /**
+   * @var bool If set, assume 'yes' or 'no' as answer to all prompts.
+   */
+  protected $assume = NULL;
+
+  /**
+   * @var bool If true, simulate all relevant actions.
+   */
+  protected $simulate = FALSE;
+
+  /**
+   * @var bool Use the pipe option.
+   */
+  protected $pipe = FALSE;
+
+  /**
+   * @var array An array of DrushOption.
+   */
+  protected $options = array();
+  /**
+   * @var array Am array of DrushParam.
+   */
+  protected $params = array();
+
+  /**
+   * @var string The 'glue' characters used between each line of the returned
+   *   output.
+   */
+  protected $returnGlue = "\n";
+
+  /**
+   * @var string The name of a Phing property to assign the Drush command's
+   *   output to.
+   */
+  protected $returnProperty = NULL;
+
+  /**
+   * @var bool Display extra information avout the command.
+   */
+  protected $verbose = FALSE;
+
+  /**
+   * @var bool Should the build fail on Drush errors
+   */
+  protected $haltOnError = TRUE;
+
+  /**
+   * @var string The alias of the Drupal site to use.
+   */
+  protected $alias = NULL;
+
+  /**
+   * @var string Path to an additional config file to load.
+   */
+  protected $config = NULL;
+
+  /**
+   * @var string Specifies the list of paths where drush will search for alias
+   *   files.
+   */
+  protected $aliasPath = NULL;
+
+  /**
+   * @var bool Whether or not to use color output.
+   */
+  protected $color = FALSE;
 
   /**
    * The Drush command to run.
