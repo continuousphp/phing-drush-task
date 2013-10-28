@@ -247,7 +247,8 @@ class DrushTask extends Task {
   public function setAssume($var) {
     if (is_string($var)) {
       $this->assume = ($var === 'yes');
-    } else {
+    }
+    else {
       $this->assume = !!$var;
     }
   }
@@ -259,7 +260,8 @@ class DrushTask extends Task {
     if (is_string($var)) {
       $var = strtolower($var);
       $this->simulate = ($var === 'yes' || $var === 'true');
-    } else {
+    }
+    else {
       $this->simulate = !!$var;
     }
   }
@@ -271,7 +273,8 @@ class DrushTask extends Task {
     if (is_string($var)) {
       $var = strtolower($var);
       $this->pipe = ($var === 'yes' || $var === 'true');
-    } else {
+    }
+    else {
       $this->pipe = !!$var;
     }
   }
@@ -280,29 +283,30 @@ class DrushTask extends Task {
    * The 'glue' characters used between each line of the returned output.
    */
   public function setReturnGlue($str) {
-    $this->return_glue = (string) $str;
+    $this->returnGlue = (string) $str;
   }
 
   /**
    * The name of a Phing property to assign the Drush command's output to.
    */
   public function setReturnProperty($str) {
-    $this->return_property = $str;
+    $this->returnProperty = $str;
   }
 
   /**
-   * Should the task fail on Drush error (non zero exit code)
+   * Should the task fail on Drush error (non zero exit code).
    */
-  public function setHaltonerror($var) {
+  public function setHaltOnError($var) {
     if (is_string($var)) {
       $var = strtolower($var);
-      $this->haltonerror = ($var === 'yes' || $var === 'true');
-    } else {
-      $this->haltonerror = !!$var;
+      $this->haltOnError = ($var === 'yes' || $var === 'true');
+    }
+    else {
+      $this->haltOnError = !!$var;
     }
   }
 
-  /**  
+  /**
    * Parameters for the Drush command.
    */
   public function createParam() {
@@ -326,7 +330,8 @@ class DrushTask extends Task {
   public function setVerbose($var) {
     if (is_string($var)) {
       $this->verbose = ($var === 'yes');
-    } else {
+    }
+    else {
       $this->verbose = !!$var;
     }
   }
@@ -337,8 +342,45 @@ class DrushTask extends Task {
   public function setAlias($var) {
     if (is_string($var)) {
       $this->alias = $var;
-    } else {
+    }
+    else {
       $this->alias = NULL;
+    }
+  }
+
+  /**
+   * Path top an additional config file to load.
+   */
+  public function setConfig($var) {
+    if (is_string($var) && !empty($var)) {
+      $this->config = $var;
+    }
+    else {
+      $this->config = NULL;
+    }
+  }
+
+  /**
+   * A list of paths where drush will search for alias files.
+   */
+  public function setAliasPath($var) {
+    if (is_string($var) && !empty($var)) {
+      $this->aliasPath = $var;
+    }
+    else {
+      $this->aliasPath = NULL;
+    }
+  }
+
+  /**
+   * Whether or not to use color output.
+   */
+  public function setColor($var) {
+    if (is_string($var) && !empty($var)) {
+      $this->color = ($var === 'yes');
+    }
+    else {
+      $this->color = (boolean) $var;
     }
   }
 
@@ -346,10 +388,13 @@ class DrushTask extends Task {
    * Initialize the task.
    */
   public function init() {
-    // Get default root, uri and binary from project.
+    // Get default properties from project.
     $this->root = $this->getProject()->getProperty('drush.root');
     $this->uri = $this->getProject()->getProperty('drush.uri');
     $this->bin = $this->getProject()->getProperty('drush.bin');
+    $this->config = $this->getProject()->getProperty('drush.config');
+    $this->aliasPath = $this->getProject()->getProperty('drush.alias-path');
+    $this->color = $this->getProject()->getProperty('drush.color');
   }
 
   /**
@@ -364,9 +409,12 @@ class DrushTask extends Task {
       $command[] = $this->alias;
     }
 
-    $option = new DrushOption();
-    $option->setName('nocolor');
-    $this->options[] = $option;
+    if (empty($this->color)) {
+      $option = new DrushOption();
+      $option->setName('nocolor');
+      $this->options[] = $option;
+    }
+
 
     if (!empty($this->root)) {
       $option = new DrushOption();
@@ -378,6 +426,20 @@ class DrushTask extends Task {
     if (!empty($this->uri)) {
       $option = new DrushOption();
       $option->setName('uri');
+      $option->addText($this->uri);
+      $this->options[] = $option;
+    }
+
+    if (!empty($this->config)) {
+      $option = new DrushOption();
+      $option->setName('config');
+      $option->addText($this->config);
+      $this->options[] = $option;
+    }
+
+    if (!empty($this->aliasPath)) {
+      $option = new DrushOption();
+      $option->setName('alias-path');
       $option->addText($this->uri);
       $this->options[] = $option;
     }
@@ -427,11 +489,11 @@ class DrushTask extends Task {
       $this->log($line);
     }
     // Set value of the 'pipe' property.
-    if (!empty($this->return_property)) {
-      $this->getProject()->setProperty($this->return_property, implode($this->return_glue, $output));
+    if (!empty($this->returnProperty)) {
+      $this->getProject()->setProperty($this->returnProperty, implode($this->returnGlue, $output));
     }
     // Build fail.
-    if ($this->haltonerror && $return != 0) {
+    if ($this->haltOnError && $return != 0) {
       throw new BuildException("Drush exited with code $return");
     }
     return $return != 0;
