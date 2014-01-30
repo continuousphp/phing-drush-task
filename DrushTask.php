@@ -214,6 +214,11 @@ class DrushTask extends Task {
   protected $color = FALSE;
 
   /**
+   * @var PhingFile Working directory.
+   */
+  protected $dir;
+
+  /**
    * The Drush command to run.
    */
   public function setCommand($str) {
@@ -385,6 +390,17 @@ class DrushTask extends Task {
   }
 
   /**
+   * Specify the working directory for executing this command.
+   *
+   * @param PhingFile $dir Working directory
+   *
+   * @return void
+   */
+  public function setDir(PhingFile $dir) {
+    $this->dir = $dir;
+  }
+
+  /**
    * Initialize the task.
    */
   public function init() {
@@ -480,10 +496,20 @@ class DrushTask extends Task {
 
     $command = implode(' ', $command);
 
+    if ($this->dir !== NULL) {
+      $currdir = getcwd();
+      @chdir($this->dir->getPath());
+    }
+
     // Execute Drush.
     $this->log("Executing '$command'...");
     $output = array();
     exec($command, $output, $return);
+
+    if (isset($currdir)) {
+      @chdir($currdir);
+    }
+
     // Collect Drush output for display through Phing's log.
     foreach ($output as $line) {
       $this->log($line);
