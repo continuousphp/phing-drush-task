@@ -405,6 +405,7 @@ class DrushTask extends Task {
    */
   public function init() {
     // Get default properties from project.
+    $this->alias = $this->getProject()->getProperty('drush.alias');
     $this->root = $this->getProject()->getProperty('drush.root');
     $this->uri = $this->getProject()->getProperty('drush.uri');
     $this->bin = $this->getProject()->getProperty('drush.bin');
