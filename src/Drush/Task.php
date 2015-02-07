@@ -1,130 +1,27 @@
 <?php
-
 /**
- * @file
- * A Phing task to run Drush commands.
- */
-require_once "phing/Task.php";
-
-/**
- * A Drush CLI parameter.
- */
-class DrushParam {
-
-  /**
-   * @var string The parameter's value.
-   */
-  protected $value;
-
-  /**
-   * Set the parameter value from a text element.
-   *
-   * @param mixed $str
-   *   The value of the text element.
-   */
-  public function addText($str) {
-    $this->value = (string) $str;
-  }
-
-  /**
-   * Get the parameter's value.
-   *
-   * return string
-   *   The parameter value.
-   */
-  public function getValue() {
-    return $this->value;
-  }
-
-}
-
-/**
- * A Drush CLI option.
- */
-class DrushOption {
-
-  /**
-   * @var string The option's name.
-   */
-  protected $name;
-
-  /**
-   * @var string The option's value.
-   */
-  protected $value;
-
-  /**
-   * Set the option's name.
-   *
-   * @param string $str
-   *   The option's name.
-   */
-  public function setName($str) {
-    $this->name = (string) $str;
-  }
-
-  /**
-   * Get the option's name.
-   *
-   * @return string
-   *   The option's name.
-   */
-  public function getName() {
-    return $this->name;
-  }
-
-  /**
-   * Set the option's value.
-   *
-   * @param string $str
-   *   The option's value.
-   */
-  public function setValue($str) {
-    $this->value = $str;
-  }
-
-  /**
-   * Set the option's value from a text element.
-   *
-   * @param string $str
-   *   The value of the text element.
-   */
-  public function addText($str) {
-    $this->value = (string) $str;
-  }
-
-  /**
-   * Get the option's value.
-   *
-   * @return string
-   *   The option's value.
-   */
-  public function getValue() {
-    return $this->value;
-  }
-
-  /**
-   * @{inheritdoc}
-   */
-  public function toString() {
-    $name  = $this->getName();
-    $value = $this->getValue();
-    $str = '--' . $name;
-    if (!empty($value)) {
-      $str .= '=' . $value;
-    }
-    return $str;
-  }
-
-}
-
-/**
- * DrushTask
+ * Task.php
  *
- * Runs the Drush commad line tool.
- * See https://github.com/drush-ops/drush
+ * @date        07/02/2015
+ * @author      Frederic Dewinne <frederic@continuousphp.com>
+ * @copyright   Copyright (c) 2015 continuousphp (http://continuousphp.com)
+ * @file        Task.php
+ * @link        http://github.com/continuousphp/phing-drush-task for the canonical source repository
+ * @license     http://opensource.org/licenses/MIT MIT License
  */
-class DrushTask extends Task {
+
+namespace Drush;
+
+/**
+ * Option
+ * Runs the Drush commad line tool.
+ *
+ * @package     Task
+ * @author      Frederic Dewinne <frederic@continuousphp.com>
+ * @link        https://github.com/drush-ops/drush
+ * @license     http://opensource.org/licenses/MIT MIT License
+ */
+class Task extends \Task {
 
   /**
    * @var string The executed Drush command.
@@ -162,11 +59,11 @@ class DrushTask extends Task {
   protected $pipe = FALSE;
 
   /**
-   * @var array An array of DrushOption.
+   * @var array An array of Option.
    */
   protected $options = array();
   /**
-   * @var array Am array of DrushParam.
+   * @var array Am array of Param.
    */
   protected $params = array();
 
@@ -315,7 +212,7 @@ class DrushTask extends Task {
    * Parameters for the Drush command.
    */
   public function createParam() {
-    $o = new DrushParam();
+    $o = new Param();
     $this->params[] = $o;
     return $o;
   }
@@ -324,7 +221,7 @@ class DrushTask extends Task {
    * Options for the Drush command.
    */
   public function createOption() {
-    $o = new DrushOption();
+    $o = new Option();
     $this->options[] = $o;
     return $o;
   }
@@ -427,60 +324,60 @@ class DrushTask extends Task {
     }
 
     if (empty($this->color)) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('nocolor');
       $this->options[] = $option;
     }
 
 
     if (!empty($this->root)) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('root');
       $option->addText($this->root);
       $this->options[] = $option;
     }
 
     if (!empty($this->uri)) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('uri');
       $option->addText($this->uri);
       $this->options[] = $option;
     }
 
     if (!empty($this->config)) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('config');
       $option->addText($this->config);
       $this->options[] = $option;
     }
 
     if (!empty($this->aliasPath)) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('alias-path');
       $option->addText($this->uri);
       $this->options[] = $option;
     }
 
     if (is_bool($this->assume)) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName(($this->assume ? 'yes' : 'no'));
       $this->options[] = $option;
     }
 
     if ($this->simulate) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('simulate');
       $this->options[] = $option;
     }
 
     if ($this->pipe) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('pipe');
       $this->options[] = $option;
     }
 
     if ($this->verbose) {
-      $option = new DrushOption();
+      $option = new Option();
       $option->setName('verbose');
       $this->options[] = $option;
     }
@@ -521,7 +418,7 @@ class DrushTask extends Task {
     }
     // Build fail.
     if ($this->haltOnError && $return != 0) {
-      throw new BuildException("Drush exited with code $return");
+      throw new \BuildException("Drush exited with code $return");
     }
     return $return != 0;
   }
