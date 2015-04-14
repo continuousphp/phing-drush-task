@@ -111,7 +111,7 @@ class DrushOption {
     $value = $this->getValue();
     $str = '--' . $name;
     if (!empty($value)) {
-      $str .= '=' . $value;
+      $str .= '="' . escapeshellcmd($value) . '"';
     }
     return $str;
   }
@@ -492,7 +492,7 @@ class DrushTask extends Task {
     $command[] = $this->command;
 
     foreach ($this->params as $param) {
-      $command[] = $param->getValue();
+      $command[] = '"' . escapeshellcmd($param->getValue()) . '"';
     }
 
     $command = implode(' ', $command);
