@@ -90,7 +90,7 @@ class Option {
         $value = $this->getValue();
         $str = '--' . $name;
         if (!empty($value)) {
-            $str .= '=' . $value;
+            $str .= '="' . escapeshellcmd($value) . '"';
         }
         return $str;
     }
