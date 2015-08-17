@@ -110,7 +110,7 @@ class DrushOption {
     $name  = $this->getName();
     $value = $this->getValue();
     $str = '--' . $name;
-    if (!empty($value)) {
+    if (isset($value) && $value != '') {
       $str .= '="' . escapeshellcmd($value) . '"';
     }
     return $str;
