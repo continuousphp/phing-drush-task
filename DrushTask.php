@@ -457,7 +457,7 @@ class DrushTask extends Task {
     if (!empty($this->aliasPath)) {
       $option = new DrushOption();
       $option->setName('alias-path');
-      $option->addText($this->uri);
+      $option->addText($this->aliasPath);
       $this->options[] = $option;
     }
 
