@@ -1,0 +1,26 @@
+{
+  "name":     "continuousphp/phing-drush-task",
+  "homepage": "https://github.com/continuousphp/phing-drush-task",
+  "description": "Drush task for Phing",
+  "type": "library",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Frederic Dewinne",
+      "email": "frederic@continuousphp.com"
+    },
+    {
+      "name": "Pierre Buyle",
+      "email": "pierre@buyle.org"
+    }
+  ],
+  "require": {
+    "phing/phing": "~2.9",
+    "drush/drush": "6.5 - 8.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "Drush\\": "src/"
+    }
+  }
+}
