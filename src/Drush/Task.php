@@ -318,7 +318,7 @@ class Task extends \Task {
   public function main() {
     $command = array();
 
-    $command[] = !empty($this->bin) ? $this->bin : 'drush';
+    $command[] = !empty($this->bin) ? '"' . $this->bin . '"' : 'drush';
 
     if (!empty($this->alias)) {
       $command[] = $this->alias;
