@@ -1,24 +1,14 @@
 <?php
 /**
- * Option.php
- *
- * @date        07/02/2015
- * @author      Frederic Dewinne <frederic@continuousphp.com>
- * @copyright   Copyright (c) 2015 continuousphp (http://continuousphp.com)
- * @file        Option.php
- * @link        http://github.com/continuousphp/phing-drush-task for the canonical source repository
- * @license     http://opensource.org/licenses/MIT MIT License
+ * @file
+ * Contains \Drush\Options
  */
 
 namespace Drush;
 
 /**
  * Option
- * A Drush CLI option.
- *
- * @package     Drush
- * @author      Frederic Dewinne <frederic@continuousphp.com>
- * @license     http://opensource.org/licenses/MIT MIT License
+ * Represents a Drush CLI option.
  */
 class Option {
 

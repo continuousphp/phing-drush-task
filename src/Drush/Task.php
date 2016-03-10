@@ -1,26 +1,15 @@
 <?php
 
 /**
- * Task.php
- *
- * @date        07/02/2015
- * @author      Frederic Dewinne <frederic@continuousphp.com>
- * @copyright   Copyright (c) 2015 continuousphp (http://continuousphp.com)
- * @file        Task.php
- * @link        http://github.com/continuousphp/phing-drush-task for the canonical source repository
- * @license     http://opensource.org/licenses/MIT MIT License
+ * @file
+ * Contains \Drush\Task
  */
+
 
 namespace Drush;
 
 /**
- * Option
- * Runs the Drush commad line tool.
- *
- * @package     Task
- * @author      Frederic Dewinne <frederic@continuousphp.com>
- * @link        https://github.com/drush-ops/drush
- * @license     http://opensource.org/licenses/MIT MIT License
+ * Phin task to execute a Drush command.
  */
 class Task extends \Task {
 
