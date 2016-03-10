@@ -1,9 +1,12 @@
 {
-  "name":     "continuousphp/phing-drush-task",
-  "homepage": "https://github.com/continuousphp/phing-drush-task",
+  "name":     "drupal/phingdrushtask",
+  "homepage": "https://www.drupal.org/project/phingdrushtask",
   "description": "Drush task for Phing",
   "type": "library",
   "license": "GPL-2.0+",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/phingdrushtask",
+  },
   "authors": [
     {
       "name": "Frederic Dewinne",
