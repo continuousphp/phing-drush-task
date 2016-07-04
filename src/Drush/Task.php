@@ -12,6 +12,8 @@
 
 namespace Drush;
 
+use PhingFile;
+
 /**
  * Option
  * Runs the Drush commad line tool.
