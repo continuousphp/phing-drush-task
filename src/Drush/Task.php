@@ -8,6 +8,8 @@
 
 namespace Drush;
 
+use PhingFile;
+
 /**
  * Phin task to execute a Drush command.
  */
