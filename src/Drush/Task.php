@@ -325,13 +325,6 @@ class Task extends \Task {
       $command[] = $this->alias;
     }
 
-    if (empty($this->color)) {
-      $option = new Option();
-      $option->setName('nocolor');
-      $this->options[] = $option;
-    }
-
-
     if (!empty($this->root)) {
       $option = new Option();
       $option->setName('root');
