@@ -14,9 +14,10 @@
       "email": "pierre@buyle.org"
     }
   ],
+  "minimum-stability": "beta",
   "require": {
     "phing/phing": "~2.9",
-    "drush/drush": "6.5 - 8.1"
+    "drush/drush": "^8.1.15 || ^9.0"
   },
   "autoload": {
     "psr-0": {
